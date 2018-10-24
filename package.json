@@ -9,7 +9,7 @@
     "react-scripts": "1.0.17",
     "react-sound": "^0.8.0"
   },
-  "homepage": "https://clement-escolano.github.io/blindtest-spotify",
+  "homepage": "https://OphelieCohu.github.io/blindtest-spotify",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -19,3 +19,4 @@
     "deploy": "gh-pages -d build"
   }
 }
+
