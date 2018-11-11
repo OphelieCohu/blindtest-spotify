@@ -6,8 +6,9 @@ import loading from './loading.svg';
 import './App.css';
 import Sound from 'react-sound';
 import Button from './Button';
+import AlbumCover from "./AlbumCover";
 
-const apiToken = 'BQBWyc04142R-0exp2uahhC_O_az-x6IaEN_Ylyydh-RXagJv7kWdaKeE7EJgGJYqD4r7LbKVo537xLkLINQwAax3_GP3VGm1Ppsd1vbRarURdFTgXxiAR5dGiehcs7lAdM-YdQ4MnFtAu2y2g';
+const apiToken = 'BQDXyNJtMafuyXEP3dd1GMrEE30-pFd_kY0PUQdxFV6agFabiBdy9li7miSqMbYlfRfR59111pvzNQ4KIp7ydY3iRt0doq1fX-WubdQ2GJ2zHXLfap5UnTLDRBEVFfWHlsNaXIck5Sm_YLSd3w';
 
 function shuffleArray(array) {
   let counter = array.length;
@@ -48,18 +49,13 @@ class App extends Component {
         Authorization: 'Bearer ' + apiToken,
       },
     })
-      .then(response => response.json())
-      .then((data) => {
-
+    .then(response => response.json())
+    .then((data) => {
         let songs = data.items;
-        console.log(songs);
-
-        this.setState({songsLoaded: true, text: songs[1].track.name})
-
-
-
-
-
+        this.setState({songsLoaded: true, text:songs[1].track.name,currentTrack:songs[1].track})
+      }
+    )
+      .catch(error => console.log('error', error))
   }
 
 
@@ -74,6 +70,7 @@ class App extends Component {
             <h1 className="App-title">Bienvenue sur le Blindtest</h1>
           </header>
           <div className="App-images">
+            <AlbumCover track={this.state.currentTrack}/>
             <p>{this.state.text}</p>
           </div>
           <div className="App-buttons">
@@ -96,14 +93,6 @@ class App extends Component {
       </div>)
     }
   }
-
 }
 
-
-class AlbumCover extends Component {
-    render() {
-    return (<img src={loading} className="App-logo" alt="logo"/>);
-  }
-}
-}
 export default App;
