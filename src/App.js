@@ -7,8 +7,9 @@ import './App.css';
 import Sound from 'react-sound';
 import Button from './Button';
 import AlbumCover from "./AlbumCover";
+import swal from 'sweetalert';
 
-const apiToken = 'BQDXyNJtMafuyXEP3dd1GMrEE30-pFd_kY0PUQdxFV6agFabiBdy9li7miSqMbYlfRfR59111pvzNQ4KIp7ydY3iRt0doq1fX-WubdQ2GJ2zHXLfap5UnTLDRBEVFfWHlsNaXIck5Sm_YLSd3w';
+const apiToken = 'BQA6RscwKamHFE0weuTEL3kL-HDHzNeApANRxJp_HsWDgk64JdxTxEEDDM4gnrv1TVrlyqrMazYWrm5RncBY3MUCVQGRYvJeRwYAopiRYxXX4uuJHB8_knQGYJem5U1kVb2TUwUO4YrgwDeGEQ';
 
 function shuffleArray(array) {
   let counter = array.length;
@@ -52,17 +53,28 @@ class App extends Component {
     .then(response => response.json())
     .then((data) => {
         let songs = data.items;
-        this.setState({songsLoaded: true, text:songs[1].track.name,currentTrack:songs[1].track})
+        this.setState({songsLoaded: true, text:songs[1].track.name, currentTrack:songs[1].track, songs})
       }
     )
       .catch(error => console.log('error', error))
   }
+
+  checkAnswer = (answer) => {
+    if (answer === this.state.currentTrack.id) {
+      return swal('Bravo', 'Bonne réponse', 'success')
+    }
+    return swal('Erreur', 'Mauvaise réponse', 'error')
+  };
 
 
 
   render() {
 
     if(this.state.songsLoaded) {
+      const track1 = this.state.songs[1].track;
+      const track2 = this.state.songs[2].track;
+      const track3 = this.state.songs[3].track;
+
       return (
         <div className="App">
           <header className="App-header">
@@ -74,12 +86,14 @@ class App extends Component {
             <p>{this.state.text}</p>
           </div>
           <div className="App-buttons">
+            <Button onClick={() => this.checkAnswer(track1.id)}>{track1.name}</Button>
+            <Button onClick={() => this.checkAnswer(track2.id)}>{track2.name}</Button>
+            <Button onClick={() => this.checkAnswer(track3.id)}>{track3.name}</Button>
           </div>
         </div>)
     }
     else{
       return(
-
       <div className="App">
         <header className="App-header">
           <img src={loading} className="App-logo" alt="logo"/>

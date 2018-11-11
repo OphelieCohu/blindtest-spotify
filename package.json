@@ -7,11 +7,12 @@
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
     "react-scripts": "1.0.17",
-    "react-sound": "^0.8.0"
+    "react-sound": "^1.2.0",
+    "sweetalert": "^2.1.2"
   },
   "homepage": "https://OphelieCohu.github.io/blindtest-spotify",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "reacst-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
