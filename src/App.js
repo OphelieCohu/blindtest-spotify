@@ -9,7 +9,7 @@ import Button from './Button';
 import AlbumCover from "./AlbumCover";
 import swal from 'sweetalert';
 
-const apiToken = 'BQA6RscwKamHFE0weuTEL3kL-HDHzNeApANRxJp_HsWDgk64JdxTxEEDDM4gnrv1TVrlyqrMazYWrm5RncBY3MUCVQGRYvJeRwYAopiRYxXX4uuJHB8_knQGYJem5U1kVb2TUwUO4YrgwDeGEQ';
+const apiToken = 'BQABs5cPqqiyWhZl4l432PN2zqAzFy65iAJjZJGvVKQXje6TxgG9h_eSFH1qTls2YuAhrZBzvbeaUB8RN-BTCnrPwj_wBIr0AfMO442ZEU8P8qPSplBtEpGmZ4drQvKq9qxhQtQSgIiQqxSpGg';
 
 function shuffleArray(array) {
   let counter = array.length;
@@ -36,32 +36,31 @@ class App extends Component {
     super();
     this.state={
       text : "",
-      songsLoaded:false
-
+      songsLoaded:false,
     }
 
   }
 
-  componentDidMount(){
-    this.setState({text :"Bonjour"})
+  fetchSongs = () =>
     fetch('https://api.spotify.com/v1/me/tracks', {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + apiToken,
       },
     })
-    .then(response => response.json())
-    .then((data) => {
-        let songs = data.items;
-        this.setState({songsLoaded: true, text:songs[1].track.name, currentTrack:songs[1].track, songs})
-      }
-    )
+      .then(response => response.json())
+      .then((data) => {
+          let songs = data.items;
+          const randomNumber=getRandomNumber(songs.length)
+          this.setState({songsLoaded: true, text:songs[randomNumber].track.name, currentTrack:songs[randomNumber].track, songs})
+        }
+      )
       .catch(error => console.log('error', error))
-  }
 
-  checkAnswer = (answer) => {
+  checkAnswer = answer => {
     if (answer === this.state.currentTrack.id) {
       return swal('Bravo', 'Bonne réponse', 'success')
+        .then(() => this.setState({ currentTrack: this.state.songs[getRandomNumber(this.state.songs.length)].track}))
     }
     return swal('Erreur', 'Mauvaise réponse', 'error')
   };
@@ -69,11 +68,10 @@ class App extends Component {
 
 
   render() {
-
     if(this.state.songsLoaded) {
-      const track1 = this.state.songs[1].track;
-      const track2 = this.state.songs[2].track;
-      const track3 = this.state.songs[3].track;
+      const track1 = this.state.songs[getRandomNumber(this.state.songs.length)].track;
+      const track2 = this.state.songs[getRandomNumber(this.state.songs.length)].track;
+      const songArray=shuffleArray([track1,track2,this.state.currentTrack])
 
       return (
         <div className="App">
@@ -83,12 +81,9 @@ class App extends Component {
           </header>
           <div className="App-images">
             <AlbumCover track={this.state.currentTrack}/>
-            <p>{this.state.text}</p>
           </div>
           <div className="App-buttons">
-            <Button onClick={() => this.checkAnswer(track1.id)}>{track1.name}</Button>
-            <Button onClick={() => this.checkAnswer(track2.id)}>{track2.name}</Button>
-            <Button onClick={() => this.checkAnswer(track3.id)}>{track3.name}</Button>
+            {songArray.map(song =><Button onClick={() => this.checkAnswer(song.id)}>{song.name}</Button>)}
           </div>
         </div>)
     }
@@ -100,9 +95,9 @@ class App extends Component {
           <h1 className="App-title">Bienvenue sur le Blindtest</h1>
         </header>
         <div className="App-images">
-          <p>{this.state.text}</p>
         </div>
-        <div className="App-buttons">
+        <div className="App-buttons" >
+          <Button onClick={() => this.fetchSongs()}> Load songs </Button>
         </div>
       </div>)
     }
